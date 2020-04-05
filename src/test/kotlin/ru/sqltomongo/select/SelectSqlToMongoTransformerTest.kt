@@ -30,7 +30,8 @@ internal class SelectSqlToMongoTransformerTest {
             "SELECT * FROM m LIMIT",
             "SELECT * FROM m OFFSET ",
             "SELECT * FROM m WHEN x = 'name'",
-            "SELECT * FROM m where x = 3 OR name = 'Hello'",
+            "SELECT * FROM m WHERE x = 'name' AND x = 'name2'",
+            "SELECT * FROM m WHERE x = 3 OR name = 'Hello'",
             "SELECT name, FROM m"
         ]
     )
@@ -54,6 +55,10 @@ internal class SelectSqlToMongoTransformerTest {
             Arguments.of(
                 "SELECT * FROM persons WHERE name = 'Michael' AND age < 40",
                 "db.persons.find( { name: \"Michael\", age: { \$lt: 40 } } )"
+            ),
+            Arguments.of(
+                "SELECT * FROM persons WHERE name = 'Michael' AND age = 40",
+                "db.persons.find( { name: \"Michael\", age: 40 } )"
             ),
             Arguments.of(
                 "SELECT * FROM persons WHERE name = 'Michael' AND age < 40 AND age >= 20",
